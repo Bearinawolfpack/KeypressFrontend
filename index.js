@@ -7,12 +7,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     fetch(url)
     .then(resp => resp.json())
-    .then(playlists => console.log(playlists))
+    .then(playlists => playlists)
 
-
+    const playSound = document.getElementById('sound')
+    
 
 
 	document.addEventListener("keydown", (event) => {
-		console.dir(event);
+        if(event.code === 'KeyT'){
+            playSound.play()
+        }
 	});
 });
