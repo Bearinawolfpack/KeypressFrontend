@@ -1,9 +1,16 @@
 document.addEventListener("DOMContentLoaded", (event) => {
-    console.log("Coffee check, Nap check, Laptop on. Ready to code!");
+    const url = 'http://localhost:3000/playlists'
     
     const mySound = document.getElementById("sound");
     const correctButton = document.getElementById("correct");
     correctButton.addEventListener("click", function(){ mySound.play(); }); 
+
+    fetch(url)
+    .then(resp => resp.json())
+    .then(playlists => console.log(playlists))
+
+
+
 
 	document.addEventListener("keydown", (event) => {
 		console.dir(event);
