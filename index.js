@@ -1,13 +1,14 @@
 document.addEventListener("DOMContentLoaded", (event) => {
     const url = 'http://localhost:3000/playlists'
-    const userForm = document.querySelector('form')
-    console.log(userForm)
+    // const userForm = document.querySelector('form')
+    // console.log(userForm)
     
  
 
     fetch(url)
     .then(resp => resp.json())
     .then(playlists => playlists)
+
 
     function postUser(url, newUserObj){
         fetch(url, {
@@ -21,40 +22,25 @@ document.addEventListener("DOMContentLoaded", (event) => {
         })
         .then(resp => resp.json())
         .then(addedUser => renderNewUser(addedUser))
-    }
+    }// .postUser
     
-    userForm.addEventListener('submit', (e)=>{
-        console.log(e)
+
+    // document.addEventListener('submit', (e)=>{
+    //     e.preventDefault();
+    //     console.log(usernameTarget)
+    //     const newUser = {
+    //         username: e.target.querySelector('#log-in-field').value
+    //     } // New User
+        
+    //     postUser('http://localhost:3000/users', newUser)
+    // }) // 'Submit' Event Listener
+    
+    document.addEventListener('submit', (e)=>{
+        e.preventDefault()
+        const usernameTarget = e.target.
+        //.querySelector('#log-in-field')
+        console.log(usernameTarget)
     })
-    
-
-    
-    // function postMonster(url, newMonsterObject){
-    //     fetch(url, {
-    //         method: "POST",
-    //         headers: 
-    //         {
-    //         "Content-Type": "application/json",
-    //         "Accept": "application/json"
-    //         },
-    //         body: JSON.stringify(newMonsterObject)
-    //     })
-    //     .then(resp => resp.json())
-    //     .then(monsterThatWasAdded => renderMonster(monsterThatWasAdded))
-    // }
-
-    // monsterCollection.addEventListener('submit', function(e){
-    //     e.preventDefault()
-
-    //     const newMonster = {
-    //         name: e.target.querySelector('#name').value,
-    //         age: e.target.querySelector('#age').value,
-    //         description: e.target.querySelector('#description').value
-    //     }
-
-    //     postMonster('http://localhost:3000/monsters', newMonster)
-    //     monsterCollection.reset()
-    // })
 
 
 
@@ -64,7 +50,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
 
-    
+
+
 	// document.addEventListener("keydown", (event) => {
     //     const sound = event.code
     //     // console.log(event.code)
@@ -90,13 +77,37 @@ document.addEventListener("DOMContentLoaded", (event) => {
     //     console.log(e.target.innerText)
     //  })
 
+}); // DOM Content Loaded
 
 
 
 
 
 
+//---------------------------TEMPLATE------------------------------------------
+    // function postMonster(url, newMonsterObject){
+    //     fetch(url, {
+    //         method: "POST",
+    //         headers: 
+    //         {
+    //         "Content-Type": "application/json",
+    //         "Accept": "application/json"
+    //         },
+    //         body: JSON.stringify(newMonsterObject)
+    //     })
+    //     .then(resp => resp.json())
+    //     .then(monsterThatWasAdded => renderMonster(monsterThatWasAdded))
+    // }
+       // monsterCollection.addEventListener('submit', function(e){
+    //     e.preventDefault()
 
+    //     const newMonster = {
+    //         name: e.target.querySelector('#name').value,
+    //         age: e.target.querySelector('#age').value,
+    //         description: e.target.querySelector('#description').value
+    //     }
 
-});
-
+    //     postMonster('http://localhost:3000/monsters', newMonster)
+    //     monsterCollection.reset()
+    // })
+//------------------------------TEMPLATE-----------------------------------
