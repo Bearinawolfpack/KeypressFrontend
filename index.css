@@ -260,3 +260,39 @@ ul, ol {padding: 0px; margin: 0;}
 
         /* For IE 6/7 (trigger hasLayout) */
         .cf {zoom:1;}
+
+        .fancy {
+            /* Within a circle, centered text looks prettier. */
+            text-align : center;
+            
+            /* color : rgb(30,100,70) */
+            /* Let's avoid our text touching the border. As
+               our text will still flow in a square, it looks
+               nicer that way, giving the feeling that it's a "real"
+               circle. */
+            padding : 1em;
+          
+            /* The border will make the circle visible.
+               You could also use a background, as
+               backgrounds are clipped by border radius */
+            border : 0.5em solid rgb(92, 95, 94);
+          
+            /* Let's make sure we have a square.
+               If it's not a square, we'll get an
+               ellipsis rather than a circle ;) */
+            width  : 4em;
+            height : 4em;
+          
+            /* and let's turn the square into a circle */
+            border-radius: 100%;
+          }
+          #fancy-span{
+            
+              font-size: 50px;
+              color: #f3f3f3;
+              /* margin-right: 1em; */
+          }
+
+          .form-text{
+            color: #f3f3f3
+          }
