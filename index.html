@@ -228,29 +228,25 @@
 
 
         <!-- LOGIN FORM -->
-        <form action=“” method=“get” class="login-form">
-            <div class=“form”>
-              <label for=“log-in” class='form-text'>Username: </label>
-              <input type=“text” name=“log-in” id=“log-in-field” required>
-            </div>
-            <div class=“form”></div>
+        <form action=“” method=“get” class="login-form" id="username-form">
+            <div class=“form” id="login-container">
+                <label for=“log-in” class='form-text'>Username: </label>
+                <input type=“text” name=“log-in” id=“login-field” required>
                 <button id='log-in'>Log In</button>
-                <button type=“submit” id='create'>Create User</button>
+                <button type=“submit” id='create'>Signup</button>
             </div>
-          </form>
-          
-          
-          <!-- MUSIC FORM -->
-          <form action=“” method=“get” class=“music-form”>
-            <div class=“form”>
+        </form>
+        
+        
+            <!-- MUSIC FORM -->
+        <form action=“” method=“get” class=“music-form” id="playlist-form">
+            <div class=“form” id="playlist-container">
                 <label for=“sequence” class='form-text'>Enter key sequence: </label>
                 <input type=“text” name=“sequence” id=“sequence-field” required>
-              </div>
-              <div class=“form”>
                 <button type=“submit” id='save'>Save to playlist</button>
                 <button id='play-button'>Play</button>
             </div>
-          </form>
+        </form>
 
         
         <cite>

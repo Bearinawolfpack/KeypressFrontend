@@ -1,85 +1,71 @@
 document.addEventListener("DOMContentLoaded", (event) => {
-    const url = 'http://localhost:3000/playlists'
-    // const userForm = document.querySelector('form')
-    // console.log(userForm)
+    const playlistsURL = 'http://localhost:3000/playlists/'
+    const usersURL = 'http://localhost:3000/users/'
+    const keyboard = document.getElementById('keyboard')
+    const loginContainer = document.getElementById('login-container')
 
-    fetch(url)
+    fetch(playlistsURL)
     .then(resp => resp.json())
     .then(playlists => playlists)
-
-
-    function postUser(url, newUserObj){
-        fetch(url, {
-            method: "POST",
-            headers:
-            {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify(newUserObj)
-        })
-        .then(resp => resp.json())
-        .then(addedUser => renderNewUser(addedUser))
-    }// .postUser
     
-
-    // document.addEventListener('submit', (e)=>{
-    //     e.preventDefault();
-    //     console.log(usernameTarget)
-    //     const newUser = {
-    //         username: e.target.querySelector('#log-in-field').value
-    //     } // New User
+    document.addEventListener('submit', (event)=>{
+        event.preventDefault()
+        if(event.target.id === 'username-form'){
+                if(loginContainer.children[2].id === "log-in"){
+                    fetch(usersURL)
+                    .then(resp => resp.json())
+                    .then(users => usersHandler(users))
+                } // if Login
+        } // if user form
         
-    //     postUser('http://localhost:3000/users', newUser)
-    // }) // 'Submit' Event Listener
-    
-    document.addEventListener('submit', (e)=>{
-        e.preventDefault()
-        const usernameTarget = e.target.
-        //.querySelector('#log-in-field')
-        console.log(usernameTarget)
-    })
+        else if(event.target.id === 'playlist-form'){
+            const playlistContainer = document.getElementById('playlist-container')
+            console.log(playlistContainer.children[1].value)
+        }
 
+        const usersHandler = (users) => {
+            loginSignupValue = loginContainer.children[1].value
+            let allNames = []
+            users.forEach(user => allNames.push(user.username))
+            const userCheck = allNames.find(name => name === loginSignupValue)
+            if(userCheck){
+                renderWelcome(userCheck)
+            } else {
+                alert("Please Signup")
+            }
+        }
 
+        const renderWelcome = (userCheck) => {
+            const playlistForm = document.getElementById('playlist-form') 
+            const welcomeBanner = document.createElement('div')
+            welcomeBanner.id = 'welcome'
+            welcomeBanner.innerHTML += `<h1>Welcome Back ${userCheck}</h1>`
+            playlistForm.appendChild(welcomeBanner)
+        }
+    }) // Username Submit Listener
 
-
-
-
-
-
-
-
-
+    ///////////////// DISABLE WHILE FORM ELEMENT ARE SELECTED?//////////////////////
 	// document.addEventListener("keydown", (event) => {
     //     const sound = event.code
     //     // console.log(event.code)
     //     const playSound = document.getElementById(sound)
     //     const fancySpan = document.getElementById('fancy-span')
     //     fancySpan.innerText = event.key.toUpperCase()
-    //      playSound.play()
-        
-<<<<<<< HEAD
-    });
-
-
-=======
-    // });
->>>>>>> 22dd7253390f61a98bfb20e46211793e51513204
-    
-    // document.addEventListener('click', (e) => {
-    //     // if(){}
-    //     // console.dir(e.target.parentElement.attributes[1])
-    //     const keyboardLi = document.querySelector('li')
-    //     // console.log(keyboardLi)
-    //     // console.log(e.target.parentElement)
-    //     const fancySpan = document.getElementById('fancy-span')
-    //     const eventTarget = e.target.innerText
-    //     const playSound = document.getElementById(`Key${eventTarget}`)
     //     playSound.play()
-    //      fancySpan.innerText = eventTarget
+    // });
+    ///////////////// DISABLE WHILE FORM ELEMENT ARE SELECTED?//////////////////////
 
-    //     console.log(e.target.innerText)
-    //  })
+    
+    keyboard.addEventListener('click', (e) => {
+        const keyboardLi = document.querySelector('li')
+        const fancySpan = document.getElementById('fancy-span')
+        const eventTarget = e.target.innerText
+        const playSound = document.getElementById(`Key${eventTarget}`)
+        playSound.play()
+        fancySpan.innerText = eventTarget
+
+        console.log(e.target.innerText)
+    })
 
 }); // DOM Content Loaded
 
@@ -115,3 +101,28 @@ document.addEventListener("DOMContentLoaded", (event) => {
     //     monsterCollection.reset()
     // })
 //------------------------------TEMPLATE-----------------------------------
+
+
+
+// function postUser(playlistsURL, newUserObj){
+    //     fetch(playlistsURL, {
+    //         method: "POST",
+    //         headers:
+    //         {
+    //             "Content-Type": "application/json",
+    //             "Accept": "application/json"
+    //         },
+    //         body: JSON.stringify(newUserObj)
+    //     })
+    //     .then(resp => resp.json())
+    //     .then(addedUser => renderNewUser(addedUser))
+    // }// .postUser
+    // document.addEventListener('submit', (e)=>{
+    //     e.preventDefault();
+    //     console.log(usernameTarget)
+    //     const newUser = {
+    //         username: e.target.querySelector('#log-in-field').value
+    //     } // New User
+        
+    //     postUser('http://localhost:3000/users', newUser)
+    // }) // 'Submit' Event Listener
