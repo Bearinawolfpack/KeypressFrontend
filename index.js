@@ -4,45 +4,68 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const keyboard = document.getElementById('keyboard')
     const loginContainer = document.getElementById('login-container')
 
+
     fetch(playlistsURL)
     .then(resp => resp.json())
     .then(playlists => playlists)
     
     document.addEventListener('submit', (event)=>{
         event.preventDefault()
-        if(event.target.id === 'username-form'){
-                if(loginContainer.children[2].id === "log-in"){
-                    fetch(usersURL)
-                    .then(resp => resp.json())
-                    .then(users => usersHandler(users))
-                } // if Login
-        } // if user form
-        
-        else if(event.target.id === 'playlist-form'){
-            const playlistContainer = document.getElementById('playlist-container')
-            console.log(playlistContainer.children[1].value)
-        }
-
-        const usersHandler = (users) => {
-            loginSignupValue = loginContainer.children[1].value
-            let allNames = []
-            users.forEach(user => allNames.push(user.username))
-            const userCheck = allNames.find(name => name === loginSignupValue)
-            if(userCheck){
-                renderWelcome(userCheck)
-            } else {
-                alert("Please Signup")
+            if(loginContainer.children[2].id === "log-in"){
+                fetch(usersURL)
+                .then(resp => resp.json())
+                .then(users => usersHandler(users))
+            } 
+            else if(loginContainer.children[3].id === "submit"){
+                createUser()
             }
-        }
+    }) // if user form
+    
 
-        const renderWelcome = (userCheck) => {
-            const playlistForm = document.getElementById('playlist-form') 
-            const welcomeBanner = document.createElement('div')
-            welcomeBanner.id = 'welcome'
-            welcomeBanner.innerHTML += `<h1>Welcome Back ${userCheck}</h1>`
-            playlistForm.appendChild(welcomeBanner)
+    const usersHandler = (users) => {
+        const loginSignupValue = loginContainer.children[1].value
+        let allNames = []
+        users.forEach(user => allNames.push(user.username))
+        const userCheck = allNames.find(name => name === loginSignupValue)
+        if(userCheck){
+            renderWelcome(userCheck)
+        } else {
+            // alert("Please Signup")
+            createUser()
         }
-    }) // Username Submit Listener
+    }
+
+    const renderWelcome = (userCheck) => {
+        const playlistForm = document.getElementById('playlist-form') 
+        const welcomeBanner = document.createElement('div')
+        welcomeBanner.id = 'welcome'
+        welcomeBanner.innerHTML += `<h1>Welcome Back ${userCheck}</h1>`
+        playlistForm.appendChild(welcomeBanner)
+
+        getPlaylists()
+    }// Username Submit Listener
+
+    const createUser = () => {
+        const loginSignupValue = loginContainer.children[1].value
+        // document.getElementById('welcome').reset();
+        console.log("Why are you here?")
+        fetch(usersURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                'username': `${loginSignupValue}`
+            })
+        })
+        .then(resp => resp.json())
+        .then(userCheck => renderWelcome(userCheck))
+    }
+
+
+
+
 
     ///////////////// DISABLE WHILE FORM ELEMENT ARE SELECTED?//////////////////////
 	// document.addEventListener("keydown", (event) => {
@@ -69,7 +92,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 }); // DOM Content Loaded
 
-
+const getPlaylists = ()
 
 
 
@@ -126,3 +149,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
         
     //     postUser('http://localhost:3000/users', newUser)
     // }) // 'Submit' Event Listener
+
+
+         // else if(event.target.id === 'playlist-form'){
+        //     const playlistContainer = document.getElementById('playlist-container')
+        //     console.log(playlistContainer.children[1].value)
+        // }
