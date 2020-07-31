@@ -3,20 +3,32 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const usersURL = 'http://localhost:3000/users/'
     const keyboard = document.getElementById('keyboard')
     const loginContainer = document.getElementById('login-container')
-    const playlistContainer = document.getElementById('playlist-container') 
+    const playlistContainer = document.getElementById('playlist-container')
+    const playlistForm = document.getElementById('playlist-form')  
     const editedSequence = playlistContainer.children[1].value
-
+    
+    
     document.addEventListener('submit', (event)=>{
         event.preventDefault()
+        // console.log(event.target.id)
             if(loginContainer.children[2].id === "log-in"){
-                fetch(usersURL)
-                .then(resp => resp.json())
-                .then(users => usersHandler(users))
+                getUsers(usersURL)
             } 
-            else if(loginContainer.children[3].id === "submit"){
-                createUser()
+            else if (event.target.id === 'save'){
+                console.log(editedSequence)
             }
-    }) // if user form
+            // else {
+            //     createUser()
+            // }
+    }) // submit listener
+
+    const getUsers = (usersURL) => {
+        fetch(usersURL)
+        .then(resp => resp.json())
+        .then(users => (
+            // console.log(users),
+            usersHandler(users)))
+    }
     
 
     const usersHandler = (users) => {
@@ -27,21 +39,21 @@ document.addEventListener("DOMContentLoaded", (event) => {
         if(userCheck){
             renderWelcome(userCheck)
         } else {
-            createUser()
+            createUser(loginSignupValue)
         } // valid user?
     } // .usersHandler
 
 
-    const renderWelcome = (userCheck) => {
+    const renderWelcome = (user) => {
         const welcomeBanner = document.createElement('div')
         welcomeBanner.id = 'welcome'
-        welcomeBanner.innerHTML += `<h1>Welcome Back ${userCheck}</h1>`
+        welcomeBanner.innerHTML += `<h1>Welcome Back ${user}</h1>`
         playlistForm.appendChild(welcomeBanner)
-    }// Username Submit Listener
+    } // Username Submit Listener
 
-    const createUser = () => {
-        const loginSignupValue = loginContainer.children[1].value
-        console.log("Why are you here?")
+    const createUser = (loginSignupValue) => {
+        // const loginSignupValue = loginContainer.children[1].value
+        console.log(loginSignupValue)
         fetch(usersURL, {
             method: 'POST',
             headers: {
@@ -52,12 +64,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 'username': `${loginSignupValue}`
             })
         })
-        .then(resp => resp.json())
-        .then(userCheck => renderWelcome(userCheck))
+        .then(response => response.json())
+        .then(user => renderWelcome(user))
     } // .createUser
 
     keyboard.addEventListener('click', (e) => {
-        const keyboardLi = document.querySelector('li')
         const fancySpan = document.getElementById('fancy-span')
         const eventTarget = e.target.innerText
         const playSound = document.getElementById(`Key${eventTarget}`)
@@ -98,9 +109,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
         else if (event.target.className === 'edit-btn') {
             updatePlaylist(event.target.id)
         }
-        else if (event.target.id === 'save') {
-            playlistPost(editedSequence)
-        }
     }) // document click listener
     
     
@@ -109,39 +117,69 @@ document.addEventListener("DOMContentLoaded", (event) => {
         .then(resp => resp.json())
         .then(playlist => sequenceEditor(playlist))
     } // .updatePlaylist
+    
+
+    playlistContainer.addEventListener('click', (event) => {
+        if(event.target.id === "play-button"){
+            sortPlaylist(playlistContainer.children[1].value)
+        }
+    })
+
+    const sortPlaylist = (sequenceValue) => {
+        let letterArray = []
+        sequenceValue.split("").forEach(letter => letterArray.push(letter));
+
+        for (let i=0; i<=letterArray.length; i++) { 
+            task(i); 
+        }
+        function task(i) { 
+            setTimeout(function() {
+                playPlaylist(letterArray[i]) 
+            }, 1000 * i); 
+        } 
+        // playPlaylist(letter)
+    }
+
+    const playPlaylist = (letter) => {
+        const playSound = document.getElementById(`Key${letter.toUpperCase()}`) // add to uppercase to prevent bugs
+        playSound.play()
+        // setTimeout(()=> {}, 1000)
+    }
 
     const sequenceEditor = (playlist) => {
         playlistContainer.children[1].value = playlist.sequence
-        
     } // .sequenceEditor
 
 
-        // fetch((playlistsURL + id), {
-        // method: 'PATCH',
-        // headers: {
-        //     'Content-Type': 'application/json',
-        //     'Accept': 'application/json'
-        // },
-        // body: JSON.stringify({
-        //     'sequence': name,
-        // })
-        // })
-        // .then(resp => resp.json())
-        // .then(thing => renderPlaylist(playlist))
+    // const playlistPost = (editedSequence) => {
 
-    //** */ find playlist with id and render it's sequence to the sequence textfield
-    // save to playlist button should push playlist onto playlist array
+    //     console.log(editedSequence)
+        // fetch((playlistsURL + id), {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Accept': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         'sequence': $`{}`,
+        //     })
+        //     })
+        //     .then(resp => resp.json())
+        //     .then(playlist => renderPlaylist(playlist))
+    // }
+
+
     
     
     ///////////////// DISABLE WHILE FORM ELEMENT ARE SELECTED?//////////////////////
-	// document.addEventListener("keydown", (event) => {
-    //     const sound = event.code
-    //     // console.log(event.code)
-    //     const playSound = document.getElementById(sound)
-    //     const fancySpan = document.getElementById('fancy-span')
-    //     fancySpan.innerText = event.key.toUpperCase()
-    //     playSound.play()
-    // });
+	document.addEventListener("keydown", (event) => {
+        const sound = event.code
+        // console.log(event.code)
+        const playSound = document.getElementById(sound)
+        const fancySpan = document.getElementById('fancy-span')
+        fancySpan.innerText = event.key.toUpperCase()
+        playSound.play()
+    });
     ///////////////// DISABLE WHILE FORM ELEMENT ARE SELECTED?//////////////////////
     
     getPlaylists(playlistsURL)
