@@ -3,7 +3,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const usersURL = 'http://localhost:3000/users/'
     const keyboard = document.getElementById('keyboard')
     const loginContainer = document.getElementById('login-container')
-    
+    const playlistContainer = document.getElementById('playlist-container') 
+    const editedSequence = playlistContainer.children[1].value
 
     document.addEventListener('submit', (event)=>{
         event.preventDefault()
@@ -27,12 +28,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
             renderWelcome(userCheck)
         } else {
             createUser()
-        }
-    }
+        } // valid user?
+    } // .usersHandler
 
 
     const renderWelcome = (userCheck) => {
-        const playlistForm = document.getElementById('playlist-form') 
         const welcomeBanner = document.createElement('div')
         welcomeBanner.id = 'welcome'
         welcomeBanner.innerHTML += `<h1>Welcome Back ${userCheck}</h1>`
@@ -54,24 +54,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
         })
         .then(resp => resp.json())
         .then(userCheck => renderWelcome(userCheck))
-    }
+    } // .createUser
 
-
-
-
-
-    ///////////////// DISABLE WHILE FORM ELEMENT ARE SELECTED?//////////////////////
-	// document.addEventListener("keydown", (event) => {
-    //     const sound = event.code
-    //     // console.log(event.code)
-    //     const playSound = document.getElementById(sound)
-    //     const fancySpan = document.getElementById('fancy-span')
-    //     fancySpan.innerText = event.key.toUpperCase()
-    //     playSound.play()
-    // });
-    ///////////////// DISABLE WHILE FORM ELEMENT ARE SELECTED?//////////////////////
-
-    
     keyboard.addEventListener('click', (e) => {
         const keyboardLi = document.querySelector('li')
         const fancySpan = document.getElementById('fancy-span')
@@ -79,13 +63,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const playSound = document.getElementById(`Key${eventTarget}`)
         playSound.play()
         fancySpan.innerText = eventTarget
-    })
+    }) // keyboard event listener
 
     const getPlaylists = (playlistsURL) => {
         fetch(playlistsURL)
         .then(resp => resp.json())
         .then(playlists => renderPlaylist(playlists))
-    }
+    } // .getPlaylists
 
     const renderPlaylist = (playlists) => {
         const playlistSize = 10;
@@ -94,7 +78,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const displayPlaylists = allPlaylists.slice(0, playlistSize)
         
         displayPlaylists.forEach(playlist => playlistLister(playlist))
-    }
+    } // .renderPlaylist
 
     const playlistLister = (playlist) => {
         const fancyContainer = document.getElementById('playlist-goes-here')
@@ -105,38 +89,60 @@ document.addEventListener("DOMContentLoaded", (event) => {
         <div><h3>${playlist.sequence}</h3></div><button id=${playlist.id} class='edit-btn'>Edit</button><button id=${playlist.id} class='delete-btn'>Delete</button>
         `
         fancyContainer.appendChild(playlistContainer)
-    }
+    } // .playlistLister
 
     document.addEventListener('click', (event) => {
         if (event.target.className === 'delete-btn') {
             deletePlaylist(event.target.id)
         }
         else if (event.target.className === 'edit-btn') {
-            const sequenceField = document.getElementById('sequence-field')
-            sequenceValue = sequenceField.value
-            // updatePlaylist(event.target.id)
+            updatePlaylist(event.target.id)
         }
-    })
+        else if (event.target.id === 'save') {
+            playlistPost(editedSequence)
+        }
+    }) // document click listener
     
     
     const updatePlaylist = (id) => {
-        
-
-        fetch((playlistsURL + id), {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-            'sequence': name,
-        })
-        })
+        fetch(playlistsURL + id)
         .then(resp => resp.json())
-        .then(thing => renderthing(thing))
-    }
+        .then(playlist => sequenceEditor(playlist))
+    } // .updatePlaylist
+
+    const sequenceEditor = (playlist) => {
+        playlistContainer.children[1].value = playlist.sequence
+        
+    } // .sequenceEditor
 
 
+        // fetch((playlistsURL + id), {
+        // method: 'PATCH',
+        // headers: {
+        //     'Content-Type': 'application/json',
+        //     'Accept': 'application/json'
+        // },
+        // body: JSON.stringify({
+        //     'sequence': name,
+        // })
+        // })
+        // .then(resp => resp.json())
+        // .then(thing => renderPlaylist(playlist))
+
+    //** */ find playlist with id and render it's sequence to the sequence textfield
+    // save to playlist button should push playlist onto playlist array
+    
+    
+    ///////////////// DISABLE WHILE FORM ELEMENT ARE SELECTED?//////////////////////
+	// document.addEventListener("keydown", (event) => {
+    //     const sound = event.code
+    //     // console.log(event.code)
+    //     const playSound = document.getElementById(sound)
+    //     const fancySpan = document.getElementById('fancy-span')
+    //     fancySpan.innerText = event.key.toUpperCase()
+    //     playSound.play()
+    // });
+    ///////////////// DISABLE WHILE FORM ELEMENT ARE SELECTED?//////////////////////
     
     getPlaylists(playlistsURL)
 }); // DOM Content Loaded
@@ -144,8 +150,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
 
-  // const sequenceContainer = document.getElementById("playlist-form")
-// const sequenceValue = // console.log(sequenceContainer.children)
+// const sequenceContainer = document.getElementById("playlist-form")
+// const sequenceValue = 
+// console.log(sequenceContainer.children[0])
 
 
 // get all playlists
