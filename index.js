@@ -3,12 +3,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const usersURL = 'http://localhost:3000/users/'
     const keyboard = document.getElementById('keyboard')
     const loginContainer = document.getElementById('login-container')
-
-
-    fetch(playlistsURL)
-    .then(resp => resp.json())
-    .then(playlists => playlists)
     
+
     document.addEventListener('submit', (event)=>{
         event.preventDefault()
             if(loginContainer.children[2].id === "log-in"){
@@ -30,10 +26,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
         if(userCheck){
             renderWelcome(userCheck)
         } else {
-            // alert("Please Signup")
             createUser()
         }
     }
+
 
     const renderWelcome = (userCheck) => {
         const playlistForm = document.getElementById('playlist-form') 
@@ -41,13 +37,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
         welcomeBanner.id = 'welcome'
         welcomeBanner.innerHTML += `<h1>Welcome Back ${userCheck}</h1>`
         playlistForm.appendChild(welcomeBanner)
-
-        getPlaylists()
     }// Username Submit Listener
 
     const createUser = () => {
         const loginSignupValue = loginContainer.children[1].value
-        // document.getElementById('welcome').reset();
         console.log("Why are you here?")
         fetch(usersURL, {
             method: 'POST',
@@ -86,13 +79,79 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const playSound = document.getElementById(`Key${eventTarget}`)
         playSound.play()
         fancySpan.innerText = eventTarget
-
-        console.log(e.target.innerText)
     })
 
+    const getPlaylists = (playlistsURL) => {
+        fetch(playlistsURL)
+        .then(resp => resp.json())
+        .then(playlists => renderPlaylist(playlists))
+    }
+
+    const renderPlaylist = (playlists) => {
+        const playlistSize = 10;
+        let allPlaylists = []
+        playlists.forEach(playlist => allPlaylists.push(playlist))
+        const displayPlaylists = allPlaylists.slice(0, playlistSize)
+        
+        displayPlaylists.forEach(playlist => playlistLister(playlist))
+    }
+
+    const playlistLister = (playlist) => {
+        const fancyContainer = document.getElementById('playlist-goes-here')
+        const playlistContainer = document.createElement('div')
+        playlistContainer.className = 'playlist-container'
+        playlistContainer.innerHTML += 
+        `
+        <div><h3>${playlist.sequence}</h3></div><button id=${playlist.id} class='edit-btn'>Edit</button><button id=${playlist.id} class='delete-btn'>Delete</button>
+        `
+        fancyContainer.appendChild(playlistContainer)
+    }
+
+    document.addEventListener('click', (event) => {
+        if (event.target.className === 'delete-btn') {
+            deletePlaylist(event.target.id)
+        }
+        else if (event.target.className === 'edit-btn') {
+            const sequenceField = document.getElementById('sequence-field')
+            sequenceValue = sequenceField.value
+            // updatePlaylist(event.target.id)
+        }
+    })
+    
+    
+    const updatePlaylist = (id) => {
+        
+
+        fetch((playlistsURL + id), {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            'sequence': name,
+        })
+        })
+        .then(resp => resp.json())
+        .then(thing => renderthing(thing))
+    }
+
+
+    
+    getPlaylists(playlistsURL)
 }); // DOM Content Loaded
 
-const getPlaylists = ()
+
+
+
+  // const sequenceContainer = document.getElementById("playlist-form")
+// const sequenceValue = // console.log(sequenceContainer.children)
+
+
+// get all playlists
+    // parse that list of playlists of all playlists that do not belong to that user
+    // lists sequences that belong to current user under that user's banner with their own divs and buttons (delete, update)
+
 
 
 
