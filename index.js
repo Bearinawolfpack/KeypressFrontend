@@ -172,14 +172,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
     
     
     ///////////////// DISABLE WHILE FORM ELEMENT ARE SELECTED?//////////////////////
-	document.addEventListener("keydown", (event) => {
-        const sound = event.code
-        // console.log(event.code)
-        const playSound = document.getElementById(sound)
-        const fancySpan = document.getElementById('fancy-span')
-        fancySpan.innerText = event.key.toUpperCase()
-        playSound.play()
-    });
+	// document.addEventListener("keydown", (event) => {
+    //     const sound = event.code
+    //     // console.log(event.code)
+    //     const playSound = document.getElementById(sound)
+    //     const fancySpan = document.getElementById('fancy-span')
+    //     fancySpan.innerText = event.key.toUpperCase()
+    //     playSound.play()
+    // });
     ///////////////// DISABLE WHILE FORM ELEMENT ARE SELECTED?//////////////////////
     
     getPlaylists(playlistsURL)
